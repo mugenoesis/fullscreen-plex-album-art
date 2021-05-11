@@ -51,6 +51,9 @@ if __name__ == '__main__':
                         previous_album_title = session.parentTitle
                         x = requests.get(session.thumbUrl)
 
+                        if not os.path.isdir('static'):
+                            os.mkdir('static')
+
                         for filename in os.listdir('static/'):
                             if filename.startswith('album'):  # not to remove other images
                                 os.remove('static/' + filename)
