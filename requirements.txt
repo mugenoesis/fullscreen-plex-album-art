@@ -1,0 +1,4 @@
+requests~=2.25.1
+gevent~=21.1.2
+PlexAPI~=4.5.2
+Flask~=1.1.2
