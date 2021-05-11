@@ -1,19 +1,39 @@
+import os
+import time
+from threading import Thread
 from time import sleep
-
+from gevent.pywsgi import WSGIServer
 import requests
 from plexapi.server import PlexServer
 from flask import Flask, render_template
+import logging
 
 app = Flask(__name__)
+log = logging.getLogger('werkzeug')
+log.disabled = True
+app.logger.disabled = True
+album_image = ''
 
 
-@app.route('/')
+class FlaskThread(Thread):
+
+    def __init__(self):
+        Thread.__init__(self)
+        self.daemon = True
+        self.start()
+
+    def run(self):
+        http_server = WSGIServer(('localhost', 5000), app)
+        http_server.serve_forever()
+
+
+@app.route('/', methods=['POST', 'GET'])
 def home():
-    return render_template('album.html')
+    return render_template('album.html', album=album_image)
 
 
 if __name__ == '__main__':
-    # app.run()
+    FlaskThread()
     baseurl = ''
     token = ''
     player_name = ''
@@ -31,7 +51,14 @@ if __name__ == '__main__':
                         previous_album_title = session.parentTitle
                         x = requests.get(session.thumbUrl)
 
-                        open('templates/album.jpg', 'wb').write(x.content)
+                        for filename in os.listdir('static/'):
+                            if filename.startswith('album'):  # not to remove other images
+                                os.remove('static/' + filename)
+
+                        file_name = f'static/album{str(time.time())}.jpg'
+                        album_image = f'album{str(time.time())}.jpg'
+                        print(album_image)
+                        open(file_name, 'wb').write(x.content)
 
                         f = open("templates/album.html", "r")
                         test = f.read()

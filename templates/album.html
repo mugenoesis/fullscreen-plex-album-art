@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script
-            type="text/javascript" src="https://livejs.com/live.js">
 
-    </script>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="4" >
 <style>
 
 html {
    width:100%;
    height:100%;
-   background:url(album.jpg) center center no-repeat;
+   background:url("{{url_for('static', filename=album)}}" ) center center no-repeat;
    background-color: #000;
    background-size: auto 95% ;
 }
@@ -20,7 +16,5 @@ html {
 </style>
 </head>
 <body>
-
-
 </body>
 </html>
